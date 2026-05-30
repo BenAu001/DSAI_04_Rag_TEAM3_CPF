@@ -6,8 +6,8 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
 
-from backend.ingest import ingest_all, list_data_files, get_document_count
-from backend.rag import ask
+from backend.ingest import ingest_all, list_data_files, get_document_count, OLLAMA_EMBED_MODEL
+from backend.rag import ask, OLLAMA_LLM_MODEL
 
 load_dotenv()
 
@@ -36,7 +36,12 @@ def serve_ui():
 @app.get("/api/status")
 def status():
     count = get_document_count()
-    return {"has_documents": count > 0, "document_count": count}
+    return {
+        "has_documents": count > 0,
+        "document_count": count,
+        "llm_model": OLLAMA_LLM_MODEL,
+        "embed_model": OLLAMA_EMBED_MODEL,
+    }
 
 
 @app.get("/api/files")

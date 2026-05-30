@@ -158,6 +158,20 @@
     }
     .msg.agent .msg-bubble.thinking { color: var(--text-muted); font-style: italic; }
 
+    /* metrics footer under agent bubble */
+    .msg-metrics {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      padding: 0 0.2rem; margin-top: 0.15rem;
+    }
+    .metric-chip {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.18rem 0.55rem; border-radius: 20px;
+      font-size: 0.68rem; font-weight: 600;
+      background: var(--surface2); color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .metric-chip .chip-icon { font-size: 0.65rem; }
+
     .sources-wrap { margin-top: 0.9rem; border-top: 1px solid var(--border); padding-top: 0.7rem; }
     .sources-label {
       font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
@@ -170,16 +184,36 @@
       border: none; color: var(--text); cursor: pointer; text-align: left; font-size: 0.79rem;
     }
     .source-toggle:hover { background: var(--bg); }
+    .source-toggle .src-rank {
+      width: 18px; height: 18px; border-radius: 4px;
+      background: rgba(108,123,255,0.2); color: var(--accent);
+      font-size: 0.65rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
     .source-toggle .src-name { font-weight: 600; flex: 1; }
     .source-toggle .src-page { color: var(--text-muted); font-size: 0.73rem; }
+    .score-badge {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0.1rem 0.45rem; border-radius: 20px;
+      font-size: 0.68rem; font-weight: 700; flex-shrink: 0;
+    }
+    .score-high   { background: rgba(76,175,134,0.15); color: #4caf86; border: 1px solid rgba(76,175,134,0.3); }
+    .score-medium { background: rgba(224,165,92,0.15); color: #e0a55c; border: 1px solid rgba(224,165,92,0.3); }
+    .score-low    { background: rgba(224,92,92,0.15);  color: #e05c5c; border: 1px solid rgba(224,92,92,0.3); }
     .source-toggle .chevron { color: var(--text-muted); transition: transform 0.15s; font-size: 0.62rem; }
     .source-toggle.open .chevron { transform: rotate(90deg); }
+
+    /* score bar inside expanded chunk */
     .source-body {
-      display: none; padding: 0.6rem 0.75rem;
+      display: none; padding: 0.65rem 0.75rem;
       font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;
       border-top: 1px solid var(--border); background: var(--bg);
     }
     .source-body.open { display: block; }
+    .score-bar-wrap { margin-bottom: 0.6rem; }
+    .score-bar-label { font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.2rem; display: flex; justify-content: space-between; }
+    .score-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .score-bar-fill  { height: 100%; border-radius: 2px; transition: width 0.4s; }
 
     /* ── Input zone ── */
     .input-zone {
@@ -236,6 +270,119 @@
     .toast.success { background: #1e3d2e; color: var(--success); border: 1px solid #2d5a3d; }
     .toast.error   { background: #3d1e1e; color: var(--error);   border: 1px solid #5a2d2d; }
 
+    /* ── View tabs ── */
+    .view-tabs {
+      display: flex; gap: 0; flex-shrink: 0;
+      padding: 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .view-tab {
+      padding: 0.55rem 1.1rem; border: none; background: transparent;
+      color: var(--text-muted); font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: all 0.15s;
+    }
+    .view-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .view-tab:hover:not(.active) { color: var(--text); }
+
+    /* ── Trace panel ── */
+    .trace-panel {
+      flex: 1; overflow-y: auto;
+      padding: 1.5rem 2.5rem 2rem;
+      display: none; flex-direction: column; gap: 1rem;
+    }
+    .trace-panel.active { display: flex; }
+    .trace-empty {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 4rem 1rem; color: var(--text-muted); font-size: 0.88rem; gap: 0.5rem;
+    }
+    .trace-meta {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1rem; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.8rem; color: var(--text-muted);
+    }
+    .trace-meta strong { color: var(--text); font-size: 0.85rem; }
+    .trace-meta .tm-sep { color: var(--border); }
+    .trace-total {
+      margin-left: auto; font-weight: 700; font-size: 0.78rem;
+      padding: 0.15rem 0.55rem; border-radius: 20px;
+      background: rgba(108,123,255,0.12); color: var(--accent);
+      border: 1px solid rgba(108,123,255,0.25);
+    }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-left: 2.2rem; display: flex; flex-direction: column; gap: 0; }
+    .timeline::before {
+      content: ''; position: absolute; left: 8px; top: 14px; bottom: 14px;
+      width: 2px; background: var(--border); border-radius: 1px;
+    }
+
+    .tl-step { position: relative; margin-bottom: 0.75rem; }
+    .tl-dot {
+      position: absolute; left: -2.2rem; top: 9px;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; z-index: 1; flex-shrink: 0;
+    }
+    .tl-dot.type-query    { background: rgba(108,123,255,0.2); color: #6c7bff; border: 1.5px solid rgba(108,123,255,0.5); }
+    .tl-dot.type-rewrite  { background: rgba(92,180,224,0.2);  color: #5cb4e0; border: 1.5px solid rgba(92,180,224,0.5); }
+    .tl-dot.type-retrieve { background: rgba(76,175,134,0.2);  color: #4caf86; border: 1.5px solid rgba(76,175,134,0.5); }
+    .tl-dot.type-rerank   { background: rgba(224,165,92,0.2);  color: #e0a55c; border: 1.5px solid rgba(224,165,92,0.5); }
+    .tl-dot.type-generate { background: rgba(180,92,224,0.2);  color: #b45ce0; border: 1.5px solid rgba(180,92,224,0.5); }
+
+    .tl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .tl-card-head {
+      display: flex; align-items: center; gap: 0.55rem;
+      padding: 0.55rem 0.85rem; cursor: pointer; user-select: none;
+    }
+    .tl-card-head:hover { background: var(--surface2); }
+    .tl-icon { font-size: 0.82rem; }
+    .tl-label { font-size: 0.83rem; font-weight: 600; flex: 1; color: var(--text); }
+    .tl-ts { font-size: 0.68rem; color: var(--text-muted); }
+    .tl-dur {
+      font-size: 0.68rem; font-weight: 700; padding: 0.1rem 0.45rem;
+      border-radius: 20px; background: var(--surface2);
+      color: var(--text-muted); border: 1px solid var(--border);
+    }
+    .tl-chevron { color: var(--text-muted); font-size: 0.58rem; transition: transform 0.15s; }
+    .tl-card.open .tl-chevron { transform: rotate(90deg); }
+
+    .tl-card-body {
+      display: none; padding: 0.7rem 0.85rem;
+      border-top: 1px solid var(--border); background: var(--bg);
+      font-size: 0.79rem; color: var(--text-muted); line-height: 1.6;
+    }
+    .tl-card.open .tl-card-body { display: block; }
+
+    .tl-kv { display: flex; gap: 0.5rem; margin-bottom: 0.2rem; flex-wrap: wrap; }
+    .tl-k { color: var(--text-muted); min-width: 115px; flex-shrink: 0; }
+    .tl-v { color: var(--text); word-break: break-word; }
+    .tl-highlight { color: var(--accent); font-family: monospace; }
+
+    .tl-retrieve-grid { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.4rem; }
+    .tl-retrieve-row {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.3rem 0.6rem; border-radius: 5px;
+      background: var(--surface); border: 1px solid var(--border); font-size: 0.76rem;
+    }
+    .tl-rrank {
+      width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0;
+      background: rgba(108,123,255,0.15); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.62rem; font-weight: 700;
+    }
+    .tl-rsrc { flex: 1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tl-rpage { color: var(--text-muted); font-size: 0.7rem; flex-shrink: 0; }
+
+    .tl-bar-wrap { margin-top: 0.3rem; }
+    .tl-bar-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem; font-size: 0.72rem; }
+    .tl-bar-lbl { min-width: 40px; flex-shrink: 0; color: var(--text-muted); }
+    .tl-bar-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .tl-bar-fill  { height: 100%; border-radius: 3px; }
+    .tl-bar-val   { min-width: 36px; text-align: right; color: var(--text); font-weight: 600; }
+
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -266,6 +413,26 @@
         <li style="font-size:0.76rem;color:var(--text-muted);padding:0.3rem 0.5rem">Loading…</li>
       </ul>
       <button class="btn-ingest" id="ingest-btn" onclick="runIngest()">Ingest Documents</button>
+    </div>
+
+    <div class="sidebar-section">
+      <h3>Model</h3>
+      <ul class="tools-list">
+        <li class="tool-item">
+          <div class="tool-icon">🧠</div>
+          <div>
+            <div class="tool-name" id="llm-model-name">—</div>
+            <div class="tool-desc">LLM (generation)</div>
+          </div>
+        </li>
+        <li class="tool-item">
+          <div class="tool-icon">🔢</div>
+          <div>
+            <div class="tool-name" id="embed-model-name">—</div>
+            <div class="tool-desc">Embeddings</div>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <div class="sidebar-section">
@@ -300,11 +467,25 @@
   <!-- Main -->
   <main class="main">
 
+    <!-- View tab bar -->
+    <div class="view-tabs">
+      <button class="view-tab active" id="tab-chat"  onclick="switchView('chat')">Chat</button>
+      <button class="view-tab"        id="tab-trace" onclick="switchView('trace')">Trace</button>
+    </div>
+
     <div class="chat-area" id="chat-area">
       <div class="chat-welcome" id="chat-welcome">
         <div class="icon">🤖</div>
         <h2>CPF RAG Assistant</h2>
         <p>Ask any question about CPF — contribution rates, allocation, CPF LIFE, and more. Powered by Ollama + LangChain.</p>
+      </div>
+    </div>
+
+    <!-- Trace panel -->
+    <div class="trace-panel" id="trace-panel">
+      <div class="trace-empty" id="trace-empty">
+        <span style="font-size:1.5rem">🔬</span>
+        Ask a question to see the decision trace here.
       </div>
     </div>
 
@@ -331,12 +512,41 @@
 <script>
 const API = '';
 let msgCounter = 0;
+let lastTrace = null;
+let lastMetrics = null;
+let lastQuestion = '';
 
+// ── View switching ─────────────────────────────────────────────
+function switchView(view) {
+  document.getElementById('tab-chat').classList.toggle('active',  view === 'chat');
+  document.getElementById('tab-trace').classList.toggle('active', view === 'trace');
+  document.getElementById('chat-area').style.display   = view === 'chat'  ? '' : 'none';
+  document.getElementById('trace-panel').classList.toggle('active', view === 'trace');
+  if (view === 'trace') renderTrace();
+}
+
+// ── Helpers ────────────────────────────────────────────────────
 function autoResize(el) {
   el.style.height = 'auto';
   el.style.height = Math.min(el.scrollHeight, 130) + 'px';
 }
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function fileName(path) { return path.split(/[\\/]/).pop(); }
+function fmtMs(ms) { return ms >= 1000 ? (ms / 1000).toFixed(1) + 's' : ms + 'ms'; }
+function scoreClass(score) {
+  if (score >= 0.75) return 'score-high';
+  if (score >= 0.50) return 'score-medium';
+  return 'score-low';
+}
+function scoreBarColor(score) {
+  if (score >= 0.75) return '#4caf86';
+  if (score >= 0.50) return '#e0a55c';
+  return '#e05c5c';
+}
 
+// ── Suggestions ────────────────────────────────────────────────
 function useSuggestion(btn) {
   const input = document.getElementById('question-input');
   input.value = btn.textContent;
@@ -344,6 +554,7 @@ function useSuggestion(btn) {
   input.focus();
 }
 
+// ── New conversation ───────────────────────────────────────────
 function newConversation() {
   document.getElementById('chat-area').innerHTML = `
     <div class="chat-welcome" id="chat-welcome">
@@ -353,31 +564,32 @@ function newConversation() {
     </div>`;
   document.getElementById('question-input').value = '';
   document.getElementById('suggested-questions').style.display = '';
+  document.getElementById('trace-panel').innerHTML =
+    '<div class="trace-empty" id="trace-empty"><span style="font-size:1.5rem">🔬</span>Ask a question to see the decision trace here.</div>';
+  lastTrace = null; lastMetrics = null; lastQuestion = '';
   msgCounter = 0;
+  switchView('chat');
 }
 
+// ── Status ─────────────────────────────────────────────────────
 async function refreshStatus() {
   try {
     const res = await fetch(API + '/api/status');
     const data = await res.json();
-    setStatus(data.has_documents, data.document_count);
-  } catch {
-    setStatus(false, 0, true);
-  }
+    setStatus(data.has_documents, data.document_count, false, data.llm_model, data.embed_model);
+  } catch { setStatus(false, 0, true); }
 }
-
-function setStatus(hasDocuments, count, error = false) {
+function setStatus(hasDocuments, count, error = false, llmModel = null, embedModel = null) {
   const el = document.getElementById('corpus-status');
-  if (error) {
-    el.innerHTML = '<div class="dot dot-orange"></div> Backend unreachable';
-  } else if (hasDocuments) {
-    el.innerHTML = `<div class="dot dot-green"></div> ${count} chunks indexed`;
-  } else {
-    el.innerHTML = '<div class="dot dot-orange"></div> No documents ingested';
-  }
+  if (error)           el.innerHTML = '<div class="dot dot-orange"></div> Backend unreachable';
+  else if (hasDocuments) el.innerHTML = `<div class="dot dot-green"></div> ${count} chunks indexed`;
+  else                 el.innerHTML = '<div class="dot dot-orange"></div> No documents ingested';
   document.getElementById('ask-btn').disabled = !hasDocuments && !error;
+  if (llmModel)   document.getElementById('llm-model-name').textContent   = llmModel;
+  if (embedModel) document.getElementById('embed-model-name').textContent = embedModel;
 }
 
+// ── Files ──────────────────────────────────────────────────────
 async function refreshFiles() {
   const listEl = document.getElementById('file-list');
   try {
@@ -397,6 +609,7 @@ async function refreshFiles() {
   }
 }
 
+// ── Ingest ─────────────────────────────────────────────────────
 async function runIngest() {
   const btn = document.getElementById('ingest-btn');
   btn.disabled = true;
@@ -404,21 +617,16 @@ async function runIngest() {
   try {
     const res = await fetch(API + '/api/ingest', { method: 'POST' });
     const data = await res.json();
-    if (!res.ok) {
-      showToast('Error: ' + (data.detail || 'Unknown error'), 'error');
-    } else {
+    if (!res.ok) { showToast('Error: ' + (data.detail || 'Unknown error'), 'error'); }
+    else {
       showToast(`Ingested ${data.documents_ingested} chunks from ${data.files_processed.length} file(s)`, 'success');
-      await refreshStatus();
-      await refreshFiles();
+      await refreshStatus(); await refreshFiles();
     }
-  } catch (e) {
-    showToast('Network error: ' + e.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = 'Ingest Documents';
-  }
+  } catch (e) { showToast('Network error: ' + e.message, 'error'); }
+  finally { btn.disabled = false; btn.innerHTML = 'Ingest Documents'; }
 }
 
+// ── Ask ────────────────────────────────────────────────────────
 async function submitAsk() {
   const input = document.getElementById('question-input');
   const question = input.value.trim();
@@ -432,8 +640,7 @@ async function submitAsk() {
   document.getElementById('suggested-questions').style.display = 'none';
 
   appendMessage('user', question);
-  input.value = '';
-  input.style.height = 'auto';
+  input.value = ''; input.style.height = 'auto';
 
   const agentId = 'msg-' + (++msgCounter);
   appendMessage('agent', 'Thinking…', agentId, true);
@@ -451,7 +658,13 @@ async function submitAsk() {
     if (!res.ok) {
       updateBubble(agentId, 'Error: ' + (data.detail || 'Unknown error'), true);
     } else {
-      updateBubble(agentId, data.answer, false, data.sources);
+      updateBubble(agentId, data.answer, false, data.sources, data.metrics);
+      // Store trace for Trace view
+      lastTrace = data.trace || null;
+      lastMetrics = data.metrics || null;
+      lastQuestion = question;
+      // Badge the Trace tab
+      document.getElementById('tab-trace').textContent = 'Trace ●';
     }
   } catch (e) {
     updateBubble(agentId, 'Network error: ' + e.message, true);
@@ -462,6 +675,7 @@ async function submitAsk() {
   }
 }
 
+// ── Chat bubbles ───────────────────────────────────────────────
 function appendMessage(role, text, id, thinking = false) {
   const chatArea = document.getElementById('chat-area');
   const div = document.createElement('div');
@@ -473,29 +687,55 @@ function appendMessage(role, text, id, thinking = false) {
   chatArea.appendChild(div);
 }
 
-function updateBubble(id, text, isError = false, sources = []) {
+function updateBubble(id, text, isError = false, sources = [], metrics = null) {
   const div = document.getElementById(id);
   if (!div) return;
   const bubble = div.querySelector('.msg-bubble');
   bubble.classList.remove('thinking');
   if (isError) { bubble.style.color = 'var(--error)'; bubble.textContent = text; return; }
   bubble.textContent = text;
+
   if (sources?.length) {
     const wrap = document.createElement('div');
     wrap.className = 'sources-wrap';
-    wrap.innerHTML = `<div class="sources-label">Sources</div>` +
+    wrap.innerHTML = `<div class="sources-label">Sources · ${sources.length} chunks retrieved</div>` +
       sources.map((s, i) => {
         const sid = id + '-s' + i;
+        const pct = Math.round((s.score ?? 0) * 100);
+        const cls = scoreClass(s.score ?? 0);
+        const barColor = scoreBarColor(s.score ?? 0);
         return `<div class="source-item">
           <button class="source-toggle" id="${sid}-btn" onclick="toggleSource('${sid}')">
-            <span class="chevron">&#9658;</span>
+            <span class="src-rank">#${s.rank ?? i+1}</span>
             <span class="src-name">${escHtml(fileName(s.source))}</span>
             ${s.page != null ? `<span class="src-page">p.${s.page}</span>` : ''}
+            ${s.score != null ? `<span class="score-badge ${cls}">${pct}%</span>` : ''}
+            <span class="chevron">&#9658;</span>
           </button>
-          <div class="source-body" id="${sid}-body">${escHtml(s.snippet)}…</div>
+          <div class="source-body" id="${sid}-body">
+            ${s.score != null ? `
+            <div class="score-bar-wrap">
+              <div class="score-bar-label"><span>Similarity score</span><span>${s.score.toFixed(4)}</span></div>
+              <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+            </div>` : ''}
+            ${escHtml(s.snippet)}…
+          </div>
         </div>`;
       }).join('');
     bubble.appendChild(wrap);
+  }
+
+  if (metrics) {
+    const footer = document.createElement('div');
+    footer.className = 'msg-metrics';
+    footer.innerHTML = `
+      <span class="metric-chip"><span class="chip-icon">⚡</span> LLM ${fmtMs(metrics.llm_ms)}</span>
+      <span class="metric-chip"><span class="chip-icon">🔍</span> Retrieve ${fmtMs(metrics.retrieve_ms)}</span>
+      <span class="metric-chip"><span class="chip-icon">✏️</span> Rewrite ${fmtMs(metrics.rewrite_ms)}</span>
+      <span class="metric-chip"><span class="chip-icon">⏱</span> Total ${fmtMs(metrics.total_ms)}</span>
+      <span class="metric-chip"><span class="chip-icon">📦</span> ${metrics.chunks_used}/${metrics.chunks_retrieved} chunks</span>
+      <span class="metric-chip"><span class="chip-icon">🧠</span> ${metrics.llm_model}</span>`;
+    div.appendChild(footer);
   }
 }
 
@@ -504,17 +744,140 @@ function toggleSource(sid) {
   document.getElementById(sid + '-body').classList.toggle('open');
 }
 
+// ── Trace rendering ────────────────────────────────────────────
+const STEP_META = {
+  query:    { icon: '💬', color: '#6c7bff' },
+  rewrite:  { icon: '✏️',  color: '#5cb4e0' },
+  retrieve: { icon: '🔍', color: '#4caf86' },
+  rerank:   { icon: '⚖️',  color: '#e0a55c' },
+  generate: { icon: '🧠', color: '#b45ce0' },
+};
+
+function renderTrace() {
+  const panel = document.getElementById('trace-panel');
+  if (!lastTrace) {
+    panel.innerHTML = '<div class="trace-empty"><span style="font-size:1.5rem">🔬</span>Ask a question to see the decision trace here.</div>';
+    return;
+  }
+
+  const m = lastMetrics || {};
+  const metaHtml = `
+    <div class="trace-meta">
+      <strong>"${escHtml(lastQuestion)}"</strong>
+      <span class="tm-sep">·</span>
+      <span>${m.llm_model || '—'}</span>
+      <span class="tm-sep">·</span>
+      <span>${m.chunks_used ?? '?'}/${m.chunks_retrieved ?? '?'} chunks used</span>
+      <span class="trace-total">Total ${fmtMs(m.total_ms ?? 0)}</span>
+    </div>`;
+
+  const stepsHtml = lastTrace.map((step, idx) => {
+    const meta = STEP_META[step.type] || { icon: '•', color: '#7a7f9a' };
+    const tsLabel = step.ts_ms > 0 ? `+${fmtMs(step.ts_ms)}` : 'start';
+    const bodyHtml = buildStepBody(step);
+    return `
+      <div class="tl-step">
+        <div class="tl-dot type-${step.type}">${meta.icon}</div>
+        <div class="tl-card" id="tl-card-${idx}">
+          <div class="tl-card-head" onclick="toggleTlCard(${idx})">
+            <span class="tl-icon">${meta.icon}</span>
+            <span class="tl-label">${escHtml(step.label)}</span>
+            <span class="tl-ts">${tsLabel}</span>
+            <span class="tl-dur">${fmtMs(step.duration_ms)}</span>
+            <span class="tl-chevron">&#9658;</span>
+          </div>
+          <div class="tl-card-body">${bodyHtml}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  panel.innerHTML = metaHtml + `<div class="timeline">${stepsHtml}</div>`;
+
+  // Auto-open all cards
+  lastTrace.forEach((_, idx) => {
+    const card = document.getElementById('tl-card-' + idx);
+    if (card) card.classList.add('open');
+  });
+}
+
+function buildStepBody(step) {
+  const d = step.data || {};
+  switch (step.type) {
+    case 'query':
+      return kv('Query', `<span class="tl-highlight">${escHtml(d.text)}</span>`);
+
+    case 'rewrite':
+      return kv('Original', escHtml(d.original)) +
+             kv('Rewritten', `<span class="tl-highlight">${escHtml(d.rewritten)}</span>`);
+
+    case 'retrieve': {
+      const rows = (d.results || []).map(r => {
+        const pct = Math.round(r.score * 100);
+        const barColor = scoreBarColor(r.score);
+        return `<div class="tl-retrieve-row">
+          <span class="tl-rrank">#${r.rank}</span>
+          <span class="tl-rsrc" title="${escHtml(r.source)}">${escHtml(r.source)}</span>
+          ${r.page != null ? `<span class="tl-rpage">p.${r.page}</span>` : ''}
+          <div style="width:80px;flex-shrink:0">
+            <div class="tl-bar-track"><div class="tl-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+          </div>
+          <span style="font-size:0.7rem;font-weight:700;color:${barColor};min-width:30px;text-align:right">${pct}%</span>
+        </div>`;
+      }).join('');
+      return kv('Query used', `<span class="tl-highlight">${escHtml(d.query_used)}</span>`) +
+             kv('Retrieved k', d.k) +
+             `<div class="tl-retrieve-grid">${rows}</div>`;
+    }
+
+    case 'rerank':
+      return kv('Kept', d.kept) +
+             kv('Filtered out', d.filtered_out) +
+             kv('Score range', `${d.min_score} – ${d.max_score}`) +
+             kv('Avg score', d.avg_score) +
+             `<div class="tl-bar-wrap">
+               <div class="tl-bar-row">
+                 <span class="tl-bar-lbl">min</span>
+                 <div class="tl-bar-track"><div class="tl-bar-fill" style="width:${Math.round(d.min_score*100)}%;background:${scoreBarColor(d.min_score)}"></div></div>
+                 <span class="tl-bar-val">${d.min_score}</span>
+               </div>
+               <div class="tl-bar-row">
+                 <span class="tl-bar-lbl">avg</span>
+                 <div class="tl-bar-track"><div class="tl-bar-fill" style="width:${Math.round(d.avg_score*100)}%;background:${scoreBarColor(d.avg_score)}"></div></div>
+                 <span class="tl-bar-val">${d.avg_score}</span>
+               </div>
+               <div class="tl-bar-row">
+                 <span class="tl-bar-lbl">max</span>
+                 <div class="tl-bar-track"><div class="tl-bar-fill" style="width:${Math.round(d.max_score*100)}%;background:${scoreBarColor(d.max_score)}"></div></div>
+                 <span class="tl-bar-val">${d.max_score}</span>
+               </div>
+             </div>`;
+
+    case 'generate':
+      return kv('Model', d.model) +
+             kv('Context chunks', d.context_chunks) +
+             kv('Answer length', `${d.answer_chars} chars`) +
+             kv('Latency', fmtMs(step.duration_ms));
+
+    default:
+      return `<pre style="font-size:0.72rem">${escHtml(JSON.stringify(d, null, 2))}</pre>`;
+  }
+}
+
+function kv(k, v) {
+  return `<div class="tl-kv"><span class="tl-k">${escHtml(k)}</span><span class="tl-v">${v}</span></div>`;
+}
+
+function toggleTlCard(idx) {
+  document.getElementById('tl-card-' + idx).classList.toggle('open');
+}
+
+// ── Toast ──────────────────────────────────────────────────────
 function showToast(msg, type = 'success') {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = `toast ${type} show`;
   setTimeout(() => el.classList.remove('show'), 4000);
 }
-
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function fileName(path) { return path.split(/[\\/]/).pop(); }
 
 refreshStatus();
 refreshFiles();
