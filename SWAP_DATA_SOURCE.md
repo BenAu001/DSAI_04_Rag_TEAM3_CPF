@@ -105,6 +105,15 @@ The frontend has several hardcoded strings that refer to the active corpus. Upda
 | Suggested question chips | 4 example questions relevant to the new content |
 | `<textarea placeholder>` | Input box hint text |
 
+### Also update the LLM prompts in `backend/rag.py`
+
+Both prompts must be domain-agnostic (or updated to match the new corpus) — a leftover persona will bleed through into every answer:
+
+| Prompt | What to check |
+|---|---|
+| `REWRITE_PROMPT` | Must not mention the old domain when expanding queries |
+| `RAG_PROMPT` | Must not include a domain-specific role (e.g. "CPF advisor") or guidelines only relevant to the old corpus |
+
 **Find all instances quickly:**
 
 ```bash

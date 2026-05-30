@@ -16,9 +16,9 @@ RETRIEVER_K = int(os.getenv("RETRIEVER_K", "6"))
 RERANK_MIN_SCORE = float(os.getenv("RERANK_MIN_SCORE", "0.0"))
 
 REWRITE_PROMPT = ChatPromptTemplate.from_template(
-    """Rewrite the following question as a short search query optimised for semantic retrieval \
-over CPF (Central Provident Fund Singapore) documents. \
-Expand abbreviations, add relevant CPF terms. \
+    """Rewrite the following question as a short, keyword-rich search query optimised \
+for semantic retrieval over a document corpus. \
+Keep the core meaning; expand pronouns and abbreviations into explicit terms. \
 Output ONLY the rewritten query, no explanation.
 
 Question: {question}
@@ -26,14 +26,14 @@ Search query:"""
 )
 
 RAG_PROMPT = ChatPromptTemplate.from_template(
-    """You are a knowledgeable CPF (Central Provident Fund) advisor for Singapore. \
+    """You are a helpful assistant. \
 Answer the question accurately and thoroughly using ONLY the provided context.
 
 Guidelines:
-- Include specific numbers, rates, age thresholds, and dates when present in the context
+- Be specific — include names, actions, quotes, and details present in the context
 - Use bullet points or numbered lists when listing multiple items or steps
-- If multiple CPF accounts or schemes are relevant, address each one clearly
 - If the context does not contain enough information to answer fully, say so explicitly
+- Do NOT add information, opinions, or disclaimers beyond what the context supports
 
 Context:
 {context}
