@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agentic RAG — CPF Assistant</title>
+  <title>Agentic RAG — Goldilocks</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -475,8 +475,8 @@
     <div class="chat-area" id="chat-area">
       <div class="chat-welcome" id="chat-welcome">
         <div class="icon">🤖</div>
-        <h2>CPF RAG Assistant</h2>
-        <p>Ask any question about CPF — contribution rates, allocation, CPF LIFE, and more. Powered by Ollama + LangChain.</p>
+        <h2>Goldilocks RAG Assistant</h2>
+        <p>Ask any question about Goldilocks and the Three Bears. Powered by Ollama + LangChain.</p>
       </div>
     </div>
 
@@ -490,13 +490,13 @@
 
     <div class="input-zone">
       <div class="suggested" id="suggested-questions">
-        <button class="suggest-btn" onclick="useSuggestion(this)">What is CPF LIFE?</button>
-        <button class="suggest-btn" onclick="useSuggestion(this)">CPF contribution rates in 2026</button>
-        <button class="suggest-btn" onclick="useSuggestion(this)">How is CPF allocated across accounts?</button>
-        <button class="suggest-btn" onclick="useSuggestion(this)">What is the Full Retirement Sum?</button>
+        <button class="suggest-btn" onclick="useSuggestion(this)">Who are the three bears?</button>
+        <button class="suggest-btn" onclick="useSuggestion(this)">What did Goldilocks eat?</button>
+        <button class="suggest-btn" onclick="useSuggestion(this)">What happened when Goldilocks fell asleep?</button>
+        <button class="suggest-btn" onclick="useSuggestion(this)">How did the story end?</button>
       </div>
       <div class="input-row">
-        <textarea id="question-input" placeholder="Ask a question about CPF…" rows="1"
+        <textarea id="question-input" placeholder="Ask a question about Goldilocks…" rows="1"
           oninput="autoResize(this)"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitAsk();}"></textarea>
         <button class="btn-ask" id="ask-btn" onclick="submitAsk()">Ask</button>

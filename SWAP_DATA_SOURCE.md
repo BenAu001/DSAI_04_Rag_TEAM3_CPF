@@ -93,7 +93,29 @@ A successful response looks like:
 
 ---
 
-## 8. Verify
+## 8. TODO — Update the UI copy
+
+The frontend has several hardcoded strings that refer to the active corpus. Update them in `frontend/index.html` whenever you swap data sources:
+
+| Location | What to change |
+|---|---|
+| `<title>` (line ~6) | Page tab title |
+| Welcome screen `<h2>` | Assistant heading in the chat area |
+| Welcome screen `<p>` | One-line description of what the corpus covers |
+| Suggested question chips | 4 example questions relevant to the new content |
+| `<textarea placeholder>` | Input box hint text |
+
+**Find all instances quickly:**
+
+```bash
+grep -n "Goldilocks\|CPF\|Three Bears" frontend/index.html
+```
+
+After editing, hard-refresh the browser (`Ctrl+Shift+R`) to clear the cache.
+
+---
+
+## 9. Verify
 
 Check the sidebar — the corpus status dot should turn **green** with the new chunk count. Ask a test question to confirm answers are drawn from the new source.
 
@@ -117,4 +139,7 @@ source venv/bin/activate
 uvicorn backend.main:app --host 0.0.0.0 --port 8000 &
 
 curl -s -X POST http://localhost:8000/api/ingest | python3 -m json.tool
+
+# Then update UI copy in frontend/index.html (see step 8)
+grep -n "Goldilocks\|CPF" frontend/index.html
 ```
